@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>typed-storage DevTools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 13px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+
+        header {
+            padding: 10px 16px;
+            background: #252526;
+            border-bottom: 1px solid #3e3e3e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        header h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        #refresh-btn {
+            margin-left: auto;
+            padding: 4px 10px;
+            background: #0e639c;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #refresh-btn:hover { background: #1177bb; }
+
+        #empty {
+            padding: 24px;
+            color: #666;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 6px 16px;
+            background: #2d2d2d;
+            color: #9cdcfe;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #3e3e3e;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 5px 16px;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        tr:hover td { background: #2a2d2e; }
+
+        .key { color: #9cdcfe; }
+        .value { color: #ce9178; }
+        .value.number { color: #b5cea8; }
+        .value.boolean { color: #569cd6; }
+        .value.object { color: #dcdcaa; }
+        .value.null { color: #666; }
+
+        #url-bar {
+            padding: 4px 16px;
+            background: #1e1e1e;
+            color: #666;
+            font-size: 11px;
+            border-bottom: 1px solid #2d2d2d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>typed-storage DevTools</h1>
+        <button id="refresh-btn">↺ Refresh</button>
+    </header>
+    <div id="url-bar">No page detected</div>
+    <div id="content">
+        <p id="empty">No localStorage data found on this page.</p>
+    </div>
+    <script src="panel.js"></script>
+</body>
+</html>
