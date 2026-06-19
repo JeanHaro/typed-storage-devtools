@@ -28,6 +28,52 @@
             color: #fff;
         }
 
+        #search-input {
+            margin-left: auto;
+            padding: 4px 10px;
+            background: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid #5a5a5a;
+            border-radius: 3px;
+            font-size: 12px;
+            width: 180px;
+        }
+
+        #search-input:focus {
+            outline: none;
+            border-color: #0e639c;
+        }
+
+        #history-btn {
+            padding: 4px 10px;
+            background: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid #5a5a5a;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #history-btn:hover { background: #4c4c4c; }
+        #history-btn.active { background: #0e639c; color: #fff; }
+
+        #history-panel {
+            max-height: 200px;
+            overflow-y: auto;
+            border-bottom: 1px solid #3e3e3e;
+        }
+
+        .history-entry {
+            padding: 6px 16px;
+            border-bottom: 1px solid #2d2d2d;
+            font-size: 12px;
+        }
+
+        .history-entry .h-key { color: #9cdcfe; font-weight: 600; }
+        .history-entry .h-time { color: #666; font-size: 10px; float: right; }
+        .history-entry .h-change { color: #ce9178; }
+        .history-entry .h-arrow { color: #666; margin: 0 4px; }
+
         #refresh-btn {
             margin-left: auto;
             padding: 4px 10px;
@@ -89,12 +135,21 @@
 <body>
     <header>
         <h1>typed-storage DevTools</h1>
+        <input type="text" id="search-input" placeholder="Filtrar por key..." />
+        <button id="history-btn">📜 History</button>
         <button id="refresh-btn">↺ Refresh</button>
     </header>
+
     <div id="url-bar">No page detected</div>
+
+    <div id="history-panel" style="display: none;">
+        <div id="history-content"></div>
+    </div>
+
     <div id="content">
         <p id="empty">No localStorage data found on this page.</p>
     </div>
-    <script src="panel.js"></script>
+
+    <script type="module" src="src/panel.js"></script>
 </body>
 </html>
