@@ -1,7 +1,8 @@
 import { renderTable } from './render-table.js';
 import { makeEditable, updateKey } from './edit-value.js';
 import { deleteKey } from './delete-key.js';
-import { addHistoryEntry, renderHistory } from './history.js';
+import { addHistoryEntry, renderHistory, clearHistory } from './history.js';
+
 import { applyFilter } from './search.js';
 import { requestStorageData } from './storage-reader.js';
 
@@ -12,6 +13,7 @@ const refreshBtn = document.getElementById('refresh-btn');
 const historyBtn = document.getElementById('history-btn');
 const historyPanel = document.getElementById('history-panel');
 const historyContent = document.getElementById('history-content');
+const clearHistoryBtn = document.getElementById('clear-history-btn');
 const searchInput = document.getElementById('search-input');
 
 let historyVisible = false;
@@ -44,11 +46,19 @@ function handleMakeEditable(td) {
 
 // --- Event listeners ---
 
+// muestra/oculta el botón clear:
 historyBtn.addEventListener('click', () => {
     historyVisible = !historyVisible;
     historyPanel.style.display = historyVisible ? 'block' : 'none';
+    clearHistoryBtn.style.display = historyVisible ? 'inline-block' : 'none';
     historyBtn.classList.toggle('active', historyVisible);
     if (historyVisible) renderHistory(historyContent);
+});
+
+clearHistoryBtn.addEventListener('click', () => {
+    if (confirm('¿Borrar todo el historial de cambios?')) {
+        clearHistory(historyContent);
+    }
 });
 
 searchInput.addEventListener('input', () => {

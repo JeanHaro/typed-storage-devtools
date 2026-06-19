@@ -15,7 +15,7 @@ export function addHistoryEntry (
     });
 }
 
-export function renderHistory ( historyContent ) {
+export function renderHistory(historyContent) {
     chrome.storage.local.get(['history'], (result) => {
         const history = (result.history || []).slice().reverse();
 
@@ -24,17 +24,47 @@ export function renderHistory ( historyContent ) {
             return;
         }
 
-        historyContent.innerHTML = history.map(entry => {
-            const time = new Date(entry.timestamp).toLocaleTimeString();
+        historyContent.innerHTML = history.map((entry, index) => {
+            const date = new Date(entry.timestamp);
+            const dateStr = date.toLocaleDateString();
+            const timeStr = date.toLocaleTimeString();
+            
             return `
                 <div class="history-entry">
-                    <span class="h-time">${time}</span>
-                    <span class="h-key">${entry.key}</span><br>
+                    <div class="h-header">
+                        <span class="h-key">${entry.key}</span>
+                        <span>
+                            <span class="h-time">${dateStr} ${timeStr}</span>
+                            <button class="history-delete-btn" data-index="${index}">✕</button>
+                        </span>
+                    </div>
                     <span class="h-change">${entry.oldValue}</span>
                     <span class="h-arrow">→</span>
                     <span class="h-change">${entry.newValue}</span>
                 </div>
             `;
         }).join('');
+
+        document.querySelectorAll('.history-delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const index = parseInt(btn.getAttribute('data-index'));
+                deleteHistoryEntry(history, index, historyContent);
+            });
+        });
     });
+}
+
+function deleteHistoryEntry(reversedHistory, indexInReversed, historyContent) {
+    // El historial mostrado está invertido (más reciente primero)
+    // hay que convertir el índice de vuelta al orden original
+    chrome.storage.local.get(['history'], (result) => {
+        const history = result.history || [];
+        const realIndex = history.length - 1 - indexInReversed;
+        history.splice(realIndex, 1);
+        chrome.storage.local.set({ history }, () => renderHistory(historyContent));
+    });
+}
+
+export function clearHistory(historyContent) {
+    chrome.storage.local.set({ history: [] }, () => renderHistory(historyContent));
 }

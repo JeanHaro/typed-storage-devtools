@@ -107,7 +107,19 @@ Type in the filter box to narrow down the table by key name — useful when you 
 
 ### Change history
 
-Click **"📜 History"** to see a log of every edit and deletion made through the panel, with timestamps and old/new values. History persists across DevTools sessions (stored in the extension's own storage, not in the page's localStorage) and keeps the last 100 entries.
+Click **"📜 History"** to see a log of every edit and deletion made through the panel, with full date and time, and old/new values.
+
+```
+Each entry shows:
+  - Key name
+  - Date and time (e.g. "19/6/2026 11:25:02")
+  - Old value → New value
+  - ✕ button to delete that specific entry
+```
+
+A **"🗑️ Clear History"** button appears when the history panel is open, letting you wipe the entire log at once (with a confirmation prompt).
+
+History persists across DevTools sessions (stored in the extension's own storage, not in the page's localStorage) and keeps the last 100 entries.
 
 > History only tracks changes made **through this panel** — not changes made by the app itself (`signal.set()` in your code) or via Chrome's native Application tab.
 
@@ -177,13 +189,22 @@ typed-storage-devtools/
 ├── manifest.json    ← Extension configuration (storage permission required)
 ├── devtools.html    ← DevTools page entry point
 ├── devtools.js       ← Creates the panel in DevTools
-├── panel.html        ← Panel UI (table, search, history)
-├── panel.js          ← Panel logic — reads, edits, validates, tracks history
+├── panel.html        ← Panel UI (table, search, history) — loads panel.js as a module
+├── src/
+│   ├── panel.js            ← Orchestrator — DOM refs, event listeners, wires modules together
+│   ├── render-table.js     ← renderTable, getValueClass, formatValue
+│   ├── edit-value.js       ← makeEditable, updateKey, getExpectedType
+│   ├── delete-key.js       ← deleteKey
+│   ├── history.js          ← addHistoryEntry, renderHistory, clearHistory
+│   ├── search.js           ← applyFilter
+│   └── storage-reader.js   ← requestStorageData
 └── icons/
     ├── storage16.png
     ├── storage48.png
     └── storage128.png
 ```
+
+The code uses native ES Modules (`import`/`export`) — no build step or bundler required. Each module receives the DOM elements and callbacks it needs as parameters rather than relying on global variables, keeping modules independently testable and avoiding hidden coupling.
 
 ---
 
